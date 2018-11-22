@@ -32,6 +32,7 @@ public class WaveManager : MonoBehaviour
 
     private void SearchForWave()
     {
+
         foreach (EnemyWave enemyWave in enemyWaves)
         {
             if (!activatedWaves.Contains(enemyWave) && enemyWave.startSpawnTimeInSeconds <= elapsedTime)
@@ -39,6 +40,7 @@ public class WaveManager : MonoBehaviour
                 activeWave = enemyWave;
                 activatedWaves.Add(enemyWave);
                 spawnCounter = 0f;
+                GameManager.Instance.waveNumber++;
             }
         }
     }
@@ -67,7 +69,7 @@ public class WaveManager : MonoBehaviour
 
                     if (activatedWaves.Count == enemyWaves.Count)
                     {
-
+                        GameManager.Instance.enemySpawningOver = true;
                     }
                 }
             }
