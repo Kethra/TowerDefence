@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
     {
         AudioSource.PlayClipAtPoint(gameWinSound, Camera.main.transform.position);
         gameOver = true;
+        UIManager.Instance.ShowWinScreen();
     }
 
     public void QuitToTitleScreen()
@@ -76,6 +77,8 @@ public class GameManager : MonoBehaviour
         EnemyManager.Instance.DestroyAllEnemies();
 
         WaveManager.Instance.StopSpawning();
+
+        UIManager.Instance.ShowLoseScreen();
     }
 
     public void RetryLevel()
