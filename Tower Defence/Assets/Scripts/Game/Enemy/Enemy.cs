@@ -41,6 +41,12 @@ public class Enemy : MonoBehaviour
 
     private int wayPointIndex = 0;
 
+    public float timeEnemyStaysFrozenInSeconds = 2f;
+
+    public bool frozen;
+
+    private float freezeTimer;
+
     void Start()
     {
         EnemyManager.Instance.RegisterEnemy(this);
@@ -94,6 +100,16 @@ public class Enemy : MonoBehaviour
         { // 2
             OnGotToLastWayPoint();
         }
+
+        if (frozen)
+        {
+            freezeTimer += Time.deltaTime;
+
+            if (freezeTimer >= timeEnemyStaysFrozenInSeconds)
+            {
+                Defrost();
+            }
+        }
     }
 
     private void UpdateMovement()
@@ -128,5 +144,21 @@ public class Enemy : MonoBehaviour
 
             Destroy(gameObject, 0.3f);
         }
+    }
+
+    public void Freeze()
+    {
+        if (!frozen)
+        {
+            frozen = true;
+            moveSpeed /= 2;
+        }
+    }
+
+    void Defrost()
+    {
+        freezeTimer = 0f;
+        frozen = false;
+        moveSpeed *= 2;
     }
 }

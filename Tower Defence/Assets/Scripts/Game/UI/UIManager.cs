@@ -12,10 +12,16 @@ public class UIManager : MonoBehaviour
     public GameObject winGameWindow;
     public GameObject losegameWIndow;
     public GameObject blackbackground;
+    public GameObject enemyHealthBarPrefab;
+    public GameObject healthBar;
+    public GameObject centerWindow;
+    public GameObject damageCanvas;
 
     public Text txtGold;
     public Text txtWave;
     public Text txtEscapedEnemies;
+
+    public Transform enemyHealthBars;
 
     void Awake()
     {
@@ -48,6 +54,34 @@ public class UIManager : MonoBehaviour
         losegameWIndow.SetActive(true);
     }
 
+    public void CreatHealthBarForEnemy(Enemy enemy)
+    {
+        GameObject healthBar = Instantiate(enemyHealthBarPrefab);
+
+        healthBar.transform.SetParent(enemyHealthBars, false);
+
+        healthBar.GetComponent<EnemyHealthBar>().enemy = enemy;
+    }
+
+    public void ShowCenterWindow(string text)
+    {
+        centerWindow.transform.FindChild("TxtWave").GetComponent<Text>().text = text;
+
+        StartCoroutine(EnableAndDisableCenterWindow());
+    }
+
+    private IEnumerator EnableAndDisableCenterWindow()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            yield return new WaitForSeconds(0.4f);
+            centerWindow.SetActive(true);
+
+            yield return new WaitForSeconds(0.4f);
+            centerWindow.SetActive(false);
+        }
+    }
+
     // Update is called once per frame
     void Update () {
         UpdateTopBar();
@@ -59,5 +93,22 @@ public class UIManager : MonoBehaviour
         towerInfoWindow.SetActive(true);
 
         UtilityMethods.MoveUiElementToWorldPosition(towerInfoWindow.GetComponent<RectTransform>(), tower.transform.position);
+    }
+
+    public void ShowDamage()
+    {
+        StartCoroutine(DoDamageAnimation());
+    }
+
+    private IEnumerator DoDamageAnimation()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            yield return new WaitForSeconds(0.1f);
+            damageCanvas.SetActive(true);
+
+            yield return new WaitForSeconds(0.1f);
+            damageCanvas.SetActive(false);
+        }
     }
 }
